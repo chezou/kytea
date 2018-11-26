@@ -4,16 +4,24 @@ configuration: Release
 platform:
 - x64
 - Win32
+
+before_build:
+  - mkdir include\kytea
+  - copy src\include\kytea\kytea.h include\kytea\
+  - copy src\include\kytea\kytea-string.h include\kytea\
 build:
   project: build-win\kytea.sln
   parallel: true
   verbosity: minimal
 
 after_build:
+    - set PLATFORM_PREFIX=
+    - if "%PLATFORM%"=="x64" set PLATFORM_PREFIX="64"
     - cd %APPVEYOR_BUILD_FOLDER%\
-    - 7z a kytea-win-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\build-win\build-win\Release*\kytea.exe
-    - 7z a kytea-win-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\build-win\build-win\Release*\train-kytea.exe
-    - 7z a kytea-win-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\build-win\build-win\Release*\lib
+    - 7z a kytea-win-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\build-win\build-win\Release%PLATFORM_PREFIX%\kytea.exe
+    - 7z a kytea-win-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\build-win\build-win\Release%PLATFORM_PREFIX%\train-kytea.exe
+    - 7z a kytea-win-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\build-win\build-win\Release%PLATFORM_PREFIX%\lib
+    - 7z a kytea-win-%PLATFORM%.zip %APPVEYOR_BUILD_FOLDER%\include
 
 artifacts:
 - path: '*.zip'
