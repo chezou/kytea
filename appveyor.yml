@@ -7,8 +7,7 @@ platform:
 
 before_build:
   - mkdir include\kytea
-  - copy src\include\kytea\kytea.h include\kytea\
-  - copy src\include\kytea\kytea-string.h include\kytea\
+  - copy src\include\kytea\*.h include\kytea\
 build:
   project: build-win\kytea.sln
   parallel: true
